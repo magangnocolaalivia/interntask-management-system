@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#ffffff" rx="40" />
+  <g fill="#0f766e">
+    <!-- Checkmark above i -->
+    <path d="M 124 162 L 176 214 C 178 216 182 216 184 214 L 272 108 L 244 86 L 179 164 L 148 134 Z" />
+    
+    <!-- i vertical bar -->
+    <rect x="156" y="234" width="46" height="116" rx="2" />
+    
+    <!-- T horizontal top bar -->
+    <rect x="206" y="174" width="128" height="44" rx="2" />
+    
+    <!-- T vertical bar -->
+    <rect x="247" y="218" width="46" height="132" rx="2" />
+  </g>
+</svg>

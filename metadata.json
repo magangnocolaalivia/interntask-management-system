@@ -1,0 +1,6 @@
+{
+  "name": "InternTask — Sistem Manajemen & Monitoring Tugas Magang",
+  "description": "Sistem Manajemen, Monitoring, dan Pelaporan Tugas Harian Peserta Magang dengan 3 Role: Intern, Mentor, dan Direktur.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
