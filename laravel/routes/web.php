@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\DashboardController;
@@ -12,41 +13,34 @@ use App\Http\Controllers\AttendanceController;
 |--------------------------------------------------------------------------
 | Web Routes - InternTask System (Laravel 11)
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group.
-|
 */
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Authentication Routes
+// Authentication Routes (Handled by AuthController)
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [DashboardController::class, 'login'])->name('login');
-    Route::post('/login', [DashboardController::class, 'authenticate'])->name('login.authenticate');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.authenticate');
 });
 
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
-    Route::post('/logout', [DashboardController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     /*
     |----------------------------------------------------------------------
     | 1. Shared Reports Route (Authorized for intern, mentor, and director)
     |----------------------------------------------------------------------
-    | Role Intern, Mentor, and Director can all access the reporting feature.
     | Controller handles strict data scoping based on Auth::user()->role.
     */
     Route::middleware(['checkRole:intern,mentor,director'])->group(function () {
-        // Global Reports endpoint
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/pdf', [ReportController::class, 'exportPdf'])->name('reports.pdf');
         Route::get('/reports/excel', [ReportController::class, 'exportExcel'])->name('reports.excel');
 
-        // Specific prefix alias for intern reporting
+        // Specific alias for intern reporting
         Route::get('/intern/reports', [ReportController::class, 'index'])->name('intern.reports');
     });
 
@@ -82,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/tasks/{task}/review', [TaskController::class, 'submitReview'])->name('tasks.review');
         Route::get('/monitoring', [TaskController::class, 'mentorMonitoring'])->name('monitoring');
 
-        // Mentor Attendance Monitoring (Supervised Interns Only)
+        // Mentor Attendance Monitoring
         Route::get('/attendance', [AttendanceController::class, 'mentorMonitoring'])->name('attendance.monitoring');
     });
 
@@ -100,11 +94,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/monitoring', [DashboardController::class, 'directorMonitoring'])->name('monitoring');
         Route::get('/activity', [DashboardController::class, 'directorActivity'])->name('activity');
 
-        // White-label Company Settings (Exclusive to Director)
+        // White-label Company Settings
         Route::get('/settings', [CompanySettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [CompanySettingController::class, 'update'])->name('settings.update');
 
-        // Director Organization Attendance Monitoring (Full Read-Only)
+        // Director Organization Attendance Monitoring
         Route::get('/attendance', [AttendanceController::class, 'directorMonitoring'])->name('attendance.monitoring');
     });
 });
